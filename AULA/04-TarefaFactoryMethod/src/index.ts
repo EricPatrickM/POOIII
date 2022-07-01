@@ -7,3 +7,9 @@ let location : Location
 location = new GameLocation()
 
 location.startItem()
+
+let location2 :Location
+
+location2 = new MovieLocation()
+
+location.startItem()
