@@ -2,14 +2,14 @@ import Location from "./Location/Location";
 import GameLocation from "./Location/GameLocation";
 import MovieLocation from "./Location/MovieLocation";
 
-let location : Location
+let teste : Location
 
-location = new GameLocation()
+teste = new GameLocation()
 
-location.startItem()
+teste.startItem()
 
-let location2 :Location
+let location2 : Location
 
 location2 = new MovieLocation()
 
-location.startItem()
+location2.startItem()
