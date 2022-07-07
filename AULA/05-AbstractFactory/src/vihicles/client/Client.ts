@@ -1,16 +1,17 @@
 import ILand from "../land/interfaces/ILand"
 import iAircraft from "../aerea/Interfaces/iAircraft"
 import ITranportFactory from "../factorys/interfaces/ITransportFactory"
+import Category from "../consts/Category"
 
 export default class Client{
     private vehicle : ILand
     private aircraft : iAircraft
     constructor(factory: ITranportFactory, tipo:string){
         switch(tipo){
-            case 'Terrestre' :
+            case Category.LAND :
                 this.vehicle = factory.createLandVehicle()
                 break
-            case 'Aereo' :
+            case Category.AERO :
                 this.aircraft = factory.createAereaVehicle()
                 break
             default:
@@ -20,9 +21,8 @@ export default class Client{
     startRoute() : void{
         if(this.vehicle){
             this.vehicle.startRoute()
-        } else {
-            if(this.aircraft)
+        } 
+        if(this.aircraft)
             this.aircraft.startRoute()
-        }
     }
 }

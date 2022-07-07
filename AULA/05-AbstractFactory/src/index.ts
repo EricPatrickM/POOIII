@@ -4,8 +4,9 @@ import Company from "./vihicles/consts/Company";
 import ITranportFactory from "./vihicles/factorys/interfaces/ITransportFactory";
 import NineNineTranport from './vihicles/factorys/NineNineTransport'
 import LimeTransport from "./vihicles/factorys/LimeTransport";
+import Category from "./vihicles/consts/Category";
 
-const currentCompany = Company.LIME
+const currentCompany = Company.UBER
 let factory : ITranportFactory
 switch(currentCompany){
     case Company.UBER :
@@ -21,7 +22,7 @@ switch(currentCompany){
         console.log('companhia nao definida!')
 }
 
-const cliente = new Client(factory!, 'Aereo')
+const cliente = new Client(factory!, Category.AERO)
 
 cliente.startRoute()
 /*
