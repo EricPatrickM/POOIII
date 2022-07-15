@@ -1,3 +1,4 @@
+import { Bucket } from "../Components/Bucket";
 import Engine from "../Components/Engine";
 import { Transmission } from "../Components/Transmission";
 import { VehicleType } from "../Components/VehicleType";
@@ -9,6 +10,7 @@ export default class Vehicle{
     private _engine : Engine
     private _transmission : Transmission
     private _wheel : Wheel[] = []
+    private _bucket : Bucket
 
     get vehicleType() : VehicleType{
         return this._vehicleType
@@ -48,5 +50,11 @@ export default class Vehicle{
 
     get whellsTotal() : number{
         return this._wheel.length
+    }
+    get bucket() : Bucket{
+        return this._bucket
+    }
+    set bucket(value : Bucket){
+        this._bucket = value
     }
 }

@@ -42,4 +42,19 @@ export default class Director{
         this.builder.addWhell(new Wheel(25))
         this.builder.addWhell(new Wheel(25))
     }
+    constructorTruck(){
+        this.builder.setVihicleType(VehicleType.TRUCK)
+        this.builder.setSeats(3)
+        this.builder.setTransmission(Transmission.MANUAL)
+        this.builder.setEngine(new Engine(5000))
+        this.builder.setBucket(5000)
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+        this.builder.addWhell(new Wheel(40))
+    }
 }

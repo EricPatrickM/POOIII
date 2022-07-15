@@ -1,3 +1,4 @@
+import { Bucket } from "../Components/Bucket";
 import Engine from "../Components/Engine";
 import { Transmission } from "../Components/Transmission";
 import { VehicleType } from "../Components/VehicleType";
@@ -7,6 +8,9 @@ import IBuilder from "./IBuilder";
 
 export default class VehicleBuilder implements IBuilder{
     private vehicle = new Vehicle()
+    setBucket(Bucket: Bucket) {
+        this.vehicle.bucket = Bucket
+    }
     reset(): void {
         this.vehicle = new Vehicle()
     }

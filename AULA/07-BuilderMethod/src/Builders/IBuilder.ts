@@ -1,3 +1,4 @@
+import { Bucket } from "../Components/Bucket"
 import Engine from "../Components/Engine"
 import { Transmission } from "../Components/Transmission"
 import { VehicleType } from "../Components/VehicleType"
@@ -12,4 +13,5 @@ export default interface IBuilder{
     setSeats( value : number) : void
     setEngine(engine : Engine) : void
     setTransmission(transmission : Transmission) : void
+    setBucket(Bucket : Bucket) : void
 }
