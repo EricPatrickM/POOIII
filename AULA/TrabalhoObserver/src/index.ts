@@ -11,6 +11,9 @@ let NVIDIA : ICommodities = new Commodities('NVIDIA', 10.00)
 corretora.inscrever(IBM)
 corretora.inscrever(Cisco)
 corretora.inscrever(NVIDIA)
+corretora.inscrever(IBM)
+corretora.desinscrever(IBM)
+corretora.desinscrever(IBM)
 
 setInterval(()=>{
     const numero = Math.random()/100+1

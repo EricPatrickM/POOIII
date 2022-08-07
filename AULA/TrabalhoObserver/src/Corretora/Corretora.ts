@@ -15,11 +15,11 @@ export default class Corretora{
     desinscrever(obj : Commodities):void {
         for(let x of this.inscritos){
             if(x == obj){
-                console.log('OBJETO NAO ESTA CADASTRADO!!')
+                this.inscritos.splice(this.inscritos.indexOf(obj), 1)
                 return
             }
         }
-        this.inscritos.splice(this.inscritos.indexOf(obj), 1)
+        console.log('OBJETO NAO ESTA CADASTRADO!!')
     }
     notifySubscrivers() : void{
         for(let x of this.inscritos){
