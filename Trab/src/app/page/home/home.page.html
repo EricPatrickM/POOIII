@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title size="large" class="ion-text-center"> Hardwares</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div id="container">
+    <ion-list>
+      <ion-item *ngFor="let hardware of hardwares">
+          <ion-label class="ion-text-center" (click)="irParaDetalhar(hardware)">{{hardware.marca}} - {{hardware.modelo}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cadastrar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="container">
+    <form [formGroup]="formCadastrar" (ngSubmit)="submitForm()">
+      <ion-list>
+        <ion-item>
+          <ion-select formControlName="tipo" placeholder="Tipo do hardware">
+            <ion-select-option value="placaMae">Placa Mãe</ion-select-option>
+            <ion-select-option value="processador">Processador</ion-select-option>
+            <ion-select-option value="memoriaRam">Memória RAM</ion-select-option>
+            <ion-select-option value="fonte">Fonte</ion-select-option>
+            <ion-select-option value="memoriaSec">HD/SSD</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="(((errorControl.tipo.touched)||(errorControl.tipo.dirty))&&errorControl.tipo.errors)">
+          <span *ngIf="errorControl.tipo.errors?.required">
+            Tipo do hardware é obrigatório!
+          </span>
+        </ion-item>
+
+        <ion-item>
+          <ion-input placeholder="Marca" formControlName="marca">
+            
+          </ion-input>
+        </ion-item>
+        <ion-item *ngIf="(((errorControl.marca.touched)||(errorControl.marca.dirty))&&errorControl.marca.errors)">
+          <span *ngIf="errorControl.marca.errors?.required">
+            Marca é obrigatório!
+          </span>
+        </ion-item>
+        
+        <ion-item>
+          <ion-input placeholder="Modelo" formControlName="modelo">
+            
+          </ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="(((errorControl.modelo.touched)||(errorControl.modelo.dirty))&&errorControl.modelo.errors)">
+          <span *ngIf="errorControl.modelo.errors?.required">
+            Modelo é obrigatório!
+          </span>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label *ngIf="this.formCadastrar.value.preco!=''">R$: </ion-label>
+          <ion-input (ionChange)="handleValorTotal()" formControlName="preco" type="text" name="money" placeholder="(R$) Real" [brmasker]="{money: true}"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="(((errorControl.preco.touched)||(errorControl.preco.dirty))&&errorControl.preco.errors)">
+          <span *ngIf="errorControl.preco.errors?.required">
+            Preco é obrigatório!
+          </span>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            Desconto
+          </ion-label>
+          <ion-select (ionChange)="handleValorTotal()" formControlName="desconto" placeholder="Desconto">
+            <ion-select-option value="0">0%</ion-select-option>
+            <ion-select-option value="1">1%</ion-select-option>
+            <ion-select-option value="2">2%</ion-select-option>
+            <ion-select-option value="3">3%</ion-select-option>
+            <ion-select-option value="4">4%</ion-select-option>
+            <ion-select-option value="5">5%</ion-select-option>
+            <ion-select-option value="6">6%</ion-select-option>
+            <ion-select-option value="7">7%</ion-select-option>
+            <ion-select-option value="8">8%</ion-select-option>
+            <ion-select-option value="9">9%</ion-select-option>
+            <ion-select-option value="10">10%</ion-select-option>
+            <ion-select-option value="15">15%</ion-select-option>
+            <ion-select-option value="20">20%</ion-select-option>
+            <ion-select-option value="30">30%</ion-select-option>
+            <ion-select-option value="40">40%</ion-select-option>
+            <ion-select-option value="50">50%</ion-select-option>
+            <ion-select-option value="60">60%</ion-select-option>
+            <ion-select-option value="70">70%</ion-select-option>
+            <ion-select-option value="80">80%</ion-select-option>
+            <ion-select-option value="90">90%</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        
+        <ion-item>
+          <ion-input placeholder="Quantidade" (ionChange)="handleValorTotal()" formControlName="quantidade">
+          </ion-input>
+        </ion-item>
+        <ion-item *ngIf="(((errorControl.quantidade.touched)||(errorControl.quantidade.dirty))&&errorControl.quantidade.errors)">
+          <span *ngIf="errorControl.quantidade.errors?.required">
+            Quantidade é obrigatório!
+          </span>
+        </ion-item>
+
+        <ion-item class="ion-text-center">
+          <ion-label>
+            Valor Total: R$ {{valorTotal}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="block" color="success" type="submit">Cadastrar</ion-button>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "POOIII",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
