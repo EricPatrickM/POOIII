@@ -1,8 +1,6 @@
-.container{
+#item{
+    --background:rgb(206, 187, 187);
     border-radius: 6px;
-    color: aqua;
-}
-.test{
-    background-color: blue;
-    border-radius: 9px;
+    border: solid 2px rgb(19, 18, 18);
+    margin-top: 2px;
 }

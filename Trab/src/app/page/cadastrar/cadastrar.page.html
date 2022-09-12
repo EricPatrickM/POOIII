@@ -11,7 +11,7 @@
   <div id="container">
     <form [formGroup]="formCadastrar" (ngSubmit)="submitForm()">
       <ion-list>
-        <ion-item>
+        <ion-item id="item">
           <ion-select formControlName="tipo" placeholder="Tipo do hardware">
             <ion-select-option value="placaMae">Placa Mãe</ion-select-option>
             <ion-select-option value="processador">Processador</ion-select-option>
@@ -26,7 +26,7 @@
           </span>
         </ion-item>
 
-        <ion-item>
+        <ion-item id="item">
           <ion-input placeholder="Marca" formControlName="marca">
             
           </ion-input>
@@ -37,7 +37,7 @@
           </span>
         </ion-item>
         
-        <ion-item>
+        <ion-item id="item">
           <ion-input placeholder="Modelo" formControlName="modelo">
             
           </ion-input>
@@ -49,7 +49,7 @@
           </span>
         </ion-item>
       
-        <ion-item>
+        <ion-item id="item">
           <ion-label *ngIf="this.formCadastrar.value.preco!=''">R$: </ion-label>
           <ion-input (ionChange)="handleValorTotal()" formControlName="preco" type="text" name="money" placeholder="(R$) Real" [brmasker]="{money: true}"></ion-input>
         </ion-item>
@@ -59,7 +59,7 @@
           </span>
         </ion-item>
 
-        <ion-item>
+        <ion-item id="item">
           <ion-label>
             Desconto
           </ion-label>
@@ -88,7 +88,7 @@
         </ion-item>
 
         
-        <ion-item>
+        <ion-item id="item">
           <ion-input placeholder="Quantidade" (ionChange)="handleValorTotal()" formControlName="quantidade">
           </ion-input>
         </ion-item>
