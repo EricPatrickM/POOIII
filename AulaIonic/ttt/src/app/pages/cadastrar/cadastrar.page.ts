@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { Contato } from '../../models/contato';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { ContatoFirebaseService } from 'src/app/services/contato-firebase.service';
 import { ContatoService } from '../../services/contato.service';
 
 @Component({
@@ -16,8 +16,12 @@ export class CadastrarPage implements OnInit {
   form_cadastrar : FormGroup;
   isSubmitted : boolean = false;
 
-  constructor(private alertController : AlertController, private router: Router, 
-    private contatoService : ContatoService, private formBuilder:FormBuilder) { }
+  constructor(private alertController : AlertController,
+     private router: Router, 
+    private contatoService : ContatoService,
+     private formBuilder:FormBuilder,
+     private contatoFS:ContatoFirebaseService,
+     private loadingCtrl: LoadingController) { }
   
   ngOnInit() {
     this.data=new Date().toISOString()
@@ -44,11 +48,28 @@ export class CadastrarPage implements OnInit {
   }
 
   private cadastrar(){
-      this.contatoService.inserir(this.form_cadastrar.value)
+    this.showLoading('aguarde', 10000)
+    this.contatoFS.inserirContato(this.form_cadastrar.value)
+    .then(()=>{    
+      this.loadingCtrl.dismiss();
       this.presentAlert('Agenda', 'Sucesso', 'Dados validos!')
-      this.router.navigate(['/home'])
+    this.router.navigate(['/home'])
+    })
+    .catch((error)=>{
+      this.loadingCtrl.dismiss();
+      this.presentAlert('Agenda', 'Falha', 'Erro no banco de dados!')
+      console.log(error)
+    })
   }
 
+  async showLoading(mensagem:string, duracao:number) {
+    const loading = await this.loadingCtrl.create({
+      message: mensagem,
+      duration: duracao,
+    });
+
+    loading.present();
+  }
 
   async presentAlert(header:string, subHeader:string,massage:string) {
     const alert = await this.alertController.create({
