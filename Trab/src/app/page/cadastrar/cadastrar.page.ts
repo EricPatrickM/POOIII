@@ -16,6 +16,7 @@ export class CadastrarPage implements OnInit {
   isSubmitted: boolean = false;
   valorTotal: number = 0.00
 
+
   async handleValorTotal(){
     console.log("PRECO" + this.formCadastrar.value.preco)
     const preco = parseFloat(this.formCadastrar.value.preco.replace(',','.'))
@@ -53,6 +54,7 @@ export class CadastrarPage implements OnInit {
       preco:["", [Validators.required, Validators.pattern('^[0-9]*.[0-9]*')]],
       desconto:["0", [Validators.required]],
       quantidade:[1, [Validators.required, Validators.pattern('^[0-9]*')]],
+      dataLancamento : ["", [Validators.required]],
     });
     this.handleValorTotal()
   }
@@ -65,7 +67,8 @@ export class CadastrarPage implements OnInit {
       this.formCadastrar.value.modelo,
       this.formCadastrar.value.preco,
       this.formCadastrar.value.desconto,
-      this.formCadastrar.value.quantidade));
+      this.formCadastrar.value.quantidade,
+      this.formCadastrar.value.dataLancamento));
       this.router.navigateByUrl('/',{
         replaceUrl : true
        })

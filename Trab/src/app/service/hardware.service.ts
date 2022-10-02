@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { finalize } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Hardware } from '../models/hardware';
 
 @Injectable({
@@ -8,7 +11,7 @@ export class HardwareService {
   private _hardwares: Hardware[] = [];
 
   constructor() {
-    let _hardware = new Hardware("placaMae", "asrock", "h 510", "5.00", 20, "2");
+    let _hardware = new Hardware("placaMae", "asrock", "h 510", "5.00", 20, "2", 2525);
     this.inserir(_hardware);
   }
 

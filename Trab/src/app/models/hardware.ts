@@ -1,26 +1,23 @@
 export class Hardware{
-    private _id : any;
     private _tipo : string;
     private _marca : string;
     private _modelo : string;
     private _preco : string;
     private _quantidade : string;
     private _desconto : number;
+    private _dataLancamento: number;
+    private _downloadURL : any;
 
-    //ta faltando desconto
     constructor(tipo : string, marca: string, modelo : string, 
-        preco : string, desconto:number, quantidade : string){
-            let chave = new Date;
-            this._id = chave.getTime();
+        preco : string, desconto:number, quantidade : string, 
+        dataLancamento:number){
             this._tipo = tipo;
             this._marca = marca;
             this._modelo = modelo;
             this._preco = preco;
             this._quantidade = quantidade;
             this._desconto = desconto;
-    }
-    public get id() : any{
-        return this._id;
+            this._dataLancamento = dataLancamento;
     }
     public get tipo() : string{
         return this._tipo;
@@ -57,5 +54,17 @@ export class Hardware{
     }
     public set desconto(desconto : number){
         this._desconto = desconto;
+    }
+    public get dataLancamento() : number{
+        return this._dataLancamento;
+    }
+    public set dataLancamento(desconto : number){
+        this._dataLancamento = desconto;
+    }
+    public get downloadURL(): any{
+        return this._downloadURL;
+    }
+    public set downloadURL(downloadURL: any){
+    this._downloadURL = downloadURL;
     }
 }
