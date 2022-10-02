@@ -98,12 +98,6 @@
           </span>
         </ion-item>
 
-        <ion-item class="ion-text-center">
-          <ion-label>
-            Valor Total: R$ {{valorTotal}}
-          </ion-label>
-        </ion-item>
-
         <ion-item>
           <ion-label>
             Selecione a data de nascimento
@@ -111,10 +105,23 @@
               <ion-datetime-button datetime="datetime"></ion-datetime-button>
               <ion-modal [keepContentsMounted]="true">
                 <ng-template>
-                  <ion-datetime formControlName=dataNascimento id="datetime"  max="{{data}}" presentation="date"></ion-datetime>
+                  <ion-datetime formControlName=dataLancamento id="datetime"  max="{{data}}" presentation="date"></ion-datetime>
                 </ng-template>
               </ion-modal>
         </ion-item>
+
+        <ion-item>
+          <ion-button size = "default" color="sucess" shape="round">
+            <input type="file" formControlName="image" (change) = "uploadFile($event.target)"/>
+          </ion-button>
+        </ion-item>
+
+        <ion-item class="ion-text-center">
+          <ion-label>
+            Valor Total: R$ {{valorTotal}}
+          </ion-label>
+        </ion-item>
+
       </ion-list>
       <ion-button class="btn" expand="block" color="success" type="submit">Cadastrar</ion-button>
     </form>

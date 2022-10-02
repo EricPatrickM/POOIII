@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Hardware } from '../../models/hardware';
 import { HardwareFirebaseService } from '../../service/hardware-firebase.service';
 
@@ -12,10 +12,11 @@ import { HardwareFirebaseService } from '../../service/hardware-firebase.service
 })
 
 export class CadastrarPage implements OnInit {
-  data : string3
+  data : string;
   formCadastrar: FormGroup;
   isSubmitted: boolean = false;
   valorTotal: number = 0.00
+  image : any;
 
 
   async handleValorTotal(){
@@ -28,6 +29,7 @@ export class CadastrarPage implements OnInit {
     }
   }
   constructor(private router: Router,
+    private loadingCtrl : LoadingController,
     private hardwareService: HardwareFirebaseService,
     private formBuilder: FormBuilder,
   private alertController : AlertController) { }
@@ -61,8 +63,22 @@ export class CadastrarPage implements OnInit {
     this.handleValorTotal()
   }
 
+  uploadFile(image : any){
+    this.image = image.files;
+  }
+
   private cadastrar(){
     this.showLoading("Aguarde", 10000)
+    this.hardwareService.enviarImagem(this.image, this.formCadastrar.value).then(()=>{
+      this.loadingCtrl.dismiss();
+      this.presentAlert("Alerta", "Cadastro", "Todos os campos foram preenchidos");
+      this.router.navigate(["\home"]);
+    })
+    .catch((error) => {
+      this.loadingCtrl.dismiss();
+      this.presentAlert("Alerta", "Erro", "Erro ao cadastrar");
+      console.log(error);
+    })
   }
 
   async presentAlert(header:string, subHeader:string,massage:string) {

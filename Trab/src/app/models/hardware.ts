@@ -1,4 +1,5 @@
 export class Hardware{
+    private _id: string;
     private _tipo : string;
     private _marca : string;
     private _modelo : string;
@@ -19,6 +20,9 @@ export class Hardware{
             this._desconto = desconto;
             this._dataLancamento = dataLancamento;
     }
+     public get id() : string{
+        return this._id;
+     }
     public get tipo() : string{
         return this._tipo;
     }

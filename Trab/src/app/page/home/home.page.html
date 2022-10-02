@@ -12,7 +12,13 @@
   <div id="container">
     <ion-list>
       <ion-item id="item" *ngFor="let hardware of hardwares">
-          <ion-label color="dark" class="test" class="ion-text-center" (click)="irParaDetalhar(hardware)">{{hardware.marca}} - {{hardware.modelo}}</ion-label>
+      <ion-item>
+          <ion-avatar>
+            <img src="{{hardware.downloadURL}}" />
+          </ion-avatar>
+          <ion-label color="dark" class="test" class="ion-text-center" (click)="irParaDetalhar(hardware)">{{hardware.marca}} - {{hardware.modelo}}
+          </ion-label>
+        </ion-item>
       </ion-item>
     </ion-list>
   </div>

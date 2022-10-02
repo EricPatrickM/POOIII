@@ -8,24 +8,21 @@ import { HardwareFirebaseService } from 'src/app/service/hardware-firebase.servi
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage{
   hardwares : Hardware[];
 
   constructor(private activatedRoute: ActivatedRoute, private router : Router, 
-    private hardwareService:HardwareFirebaseService) { }
+    private hardwareService:HardwareFirebaseService) { 
+      this.carregarContatos();
+    }
     
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
-
   carregarContatos(){
-    this.hardwareService.getHardwares()
-    .subscribe(res => {
-      this.hardwares = res.map(c =>{
-       return{
-        id: c.payload.doc.id,
-        ...c.payload.doc.data() as Hardware
-       }as Hardware;
+    this.hardwareService.getHardwares().subscribe(res => {
+      this.hardwares = res.map(h =>{
+        return{
+          id : h.payload.doc.id,
+          ...h.payload.doc.data() as Hardware
+        } as Hardware;
       })
     });
   }

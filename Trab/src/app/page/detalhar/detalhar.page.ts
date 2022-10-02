@@ -13,19 +13,21 @@ import { HardwareFirebaseService } from '../../service/hardware-firebase.service
 })
 export class DetalharPage implements OnInit {
   formCadastrar: FormGroup;
-  isSubmitted: boolean = false;
   valorTotal: number = 0.00;
   edicao: boolean = true;
   hardware : Hardware;
+  data: string;
 
   constructor(private router: Router,
     private hardwareService: HardwareFirebaseService,
     private formBuilder: FormBuilder,
+    private hardwareFS : HardwareFirebaseService,
   private alertController : AlertController) { }
 
   ngOnInit() {
     const nav = this.router.getCurrentNavigation()
     this.hardware = nav.extras.state.Objeto;
+    this.data = new Date().toISOString();
     this.formCadastrar = this.formBuilder.group({
       tipo : [this.hardware.tipo, [Validators.required]], 
       marca:[this.hardware.marca, [Validators.required]],
@@ -33,8 +35,9 @@ export class DetalharPage implements OnInit {
       preco:[this.hardware.preco, [Validators.required, Validators.pattern('^[0-9]*.[0-9]*')]],
       desconto:[this.hardware.desconto.toString(), [Validators.required]],
       quantidade:[this.hardware.quantidade, [Validators.required, Validators.pattern('^[0-9]*')]],
+      dataLancamento : ["", [Validators.required]],
     });
-    this.handleValorTotal()
+    this.handleValorTotal();
   }
 
   get errorControl(){
@@ -61,16 +64,17 @@ export class DetalharPage implements OnInit {
   }
 
   editar(){
-    this.hardwareService.editarHardware( 
-      this.hardware,
-      this.formCadastrar.value.tipo,
-      this.formCadastrar.value.marca,
-      this.formCadastrar.value.modelo,
-      this.formCadastrar.value.preco,
-      this.formCadastrar.value.desconto,
-      this.formCadastrar.value.quantidade);
+      this.hardwareFS.editarHardware(this.formCadastrar.value, this.hardware.id).then
+      (()=>{
+        this.presentAlert('Hardware', 'Sucesso', 'Contato Alterado!')
+        this.router.navigate(['/home'])
+      })
       this.router.navigateByUrl('/',{
         replaceUrl : true
+      })
+      .catch((error) => {
+        this.presentAlert('Hardware', 'Falha', 'Erro no banco')
+        console.log(error)
       })
   }
   async presentAlert(header:string, subHeader:string,massage:string) {
@@ -83,8 +87,7 @@ export class DetalharPage implements OnInit {
     await alert.present();
   }
   excluir(){
-    this.presentAlertConfirm("", "Excluir Hardware",
-    "Você realmente deseja excluir o hardware?");
+    this.presentAlertConfirm('Alerta', 'Excluir', 'Você realmente deseja excluir?')
   }
 
   async presentAlertConfirm(header: string, subHeader: string,
@@ -103,7 +106,7 @@ export class DetalharPage implements OnInit {
           text: 'OK',
           role: 'confirm',
           handler: () => {
-            this.excluirContato()
+            this.excluirHardware();
           },
         },
       ],
@@ -111,12 +114,12 @@ export class DetalharPage implements OnInit {
     await alert.present();
   }
   
-  private excluirContato(){
-    if(this.hardwareService.excluir(this.hardware)){
-      this.presentAlert("Agenda", "Excluir", "Exclusão Realizada");
+  private excluirHardware(){
+    if(this.hardwareFS.excluirHardware(this.hardware)){
+      this.presentAlert("Excluir", "", "Exclusão Realizada");
       this.router.navigate(["/home"]);
     }else{
-      this.presentAlert("Agenda", "Excluir", "Contato Não Encontrado!");
+      this.presentAlert("Excluir", "", "Contato Não Encontrado!");
     }
   }
 }
