@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Contato } from 'src/app/models/contato';
-import { ContatoService } from 'src/app/services/contato.service';
+import { ContatoFirebaseService } from 'src/app/services/contato-firebase.service';
 
 @Component({
   selector: 'app-detalhar',
@@ -17,10 +17,11 @@ export class DetalharPage implements OnInit {
   
   acaoBotao:boolean=false;
   form_detalhar : FormGroup;
-  isSubmitted : boolean = false;
   
   
-  constructor(private router:Router, private alertController : AlertController, private contatoService : ContatoService,
+  constructor(private router:Router, 
+    private alertController : AlertController,
+    private contatoFS : ContatoFirebaseService,
     private formBuilder:FormBuilder) { }
     
     ngOnInit() {
@@ -42,7 +43,6 @@ export class DetalharPage implements OnInit {
     }
 
     submitForm():boolean{
-      this.isSubmitted = true;
       if(!this.form_detalhar.valid){
         this.presentAlert("Agenda", "Erro", "Todos os campos sao obrigatorios");
         return false
@@ -56,29 +56,20 @@ export class DetalharPage implements OnInit {
     }
 
   editar(){
-    if(this.contatoService.editar(this.contato, this.form_detalhar.value.nome, this.form_detalhar.value.telefone, this.form_detalhar.value.genero, this.form_detalhar.value.dataNascimento)){
+    this.contatoFS.editarContato(this.form_detalhar.value, this.contato.id)
+    .then(()=>{    
       this.presentAlert('Agenda', 'Sucesso', 'Contato Alterado!')
       this.router.navigate(['/home'])
-    } else {
-      this.presentAlert('Agenda', 'Erro', 'Contato nâo encontrado!')
-    }
-    console.log(this.form_detalhar.value)
+    })
+    .catch((error)=>{
+      this.presentAlert('Agenda', 'Falha', 'Erro no banco de dados!')
+      console.log(error)
+    })
   }
 
-  async presentAlert(header:string, subHeader:string,massage:string) {
-    const alert = await this.alertController.create({
-      header: header,
-      subHeader: subHeader,
-      message: massage,
-      buttons: ['OK'],
-    });
-
-    await alert.present();
-  }
-
+  
   excluir(){
     this.presentAlertConfirm('Voce realmente deseja excluir o contato')
-
   }
 
   mudarAcaoBotao(value : boolean){
@@ -86,12 +77,15 @@ export class DetalharPage implements OnInit {
   }
 
   private excluirContato(){
-    if(this.contatoService.excluir(this.contato)){
+    this.contatoFS.excluirContato(this.contato)
+    .then(()=>{    
       this.presentAlert('Agenda', 'Sucesso', 'Contato Excluido!')
       this.router.navigate(['/home'])
-    } else {
-      this.presentAlert('Agenda', 'Sucesso', 'Contato nao encontrado!')
-    }
+    })
+    .catch((error)=>{
+      this.presentAlert('Agenda', 'Falha', 'Erro no banco de dados!')
+      console.log(error)
+    })
   }
 
   async presentAlertConfirm(value : string) {
@@ -113,6 +107,17 @@ export class DetalharPage implements OnInit {
         },
       ],
     });
+    await alert.present();
+  }
+
+  async presentAlert(header:string, subHeader:string,massage:string) {
+    const alert = await this.alertController.create({
+      header: header,
+      subHeader: subHeader,
+      message: massage,
+      buttons: ['OK'],
+    });
+
     await alert.present();
   }
 }
