@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { Hardware } from '../../models/hardware';
-import { HardwareService } from '../../service/hardware.service';
+import { HardwareFirebaseService } from '../../service/hardware-firebase.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class DetalharPage implements OnInit {
   hardware : Hardware;
 
   constructor(private router: Router,
-    private hardwareService: HardwareService,
+    private hardwareService: HardwareFirebaseService,
     private formBuilder: FormBuilder,
   private alertController : AlertController) { }
 
@@ -59,8 +59,10 @@ export class DetalharPage implements OnInit {
       this.edicao = true;
     }
   }
+
   editar(){
-    this.hardwareService.editar( this.hardware,
+    this.hardwareService.editarHardware( 
+      this.hardware,
       this.formCadastrar.value.tipo,
       this.formCadastrar.value.marca,
       this.formCadastrar.value.modelo,

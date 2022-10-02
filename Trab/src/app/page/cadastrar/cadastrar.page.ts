@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Hardware } from '../../models/hardware';
-import { HardwareService } from '../../service/hardware.service';
+import { HardwareFirebaseService } from '../../service/hardware-firebase.service';
 
 @Component({
   selector: 'app-cadastrar',
@@ -12,13 +12,13 @@ import { HardwareService } from '../../service/hardware.service';
 })
 
 export class CadastrarPage implements OnInit {
+  data : string3
   formCadastrar: FormGroup;
   isSubmitted: boolean = false;
   valorTotal: number = 0.00
 
 
   async handleValorTotal(){
-    console.log("PRECO" + this.formCadastrar.value.preco)
     const preco = parseFloat(this.formCadastrar.value.preco.replace(',','.'))
     const value = Math.round((this.formCadastrar.value.quantidade*preco*(1-this.formCadastrar.value.desconto/100)) * 100) / 100;
     if(isNaN(value)){
@@ -28,7 +28,7 @@ export class CadastrarPage implements OnInit {
     }
   }
   constructor(private router: Router,
-    private hardwareService: HardwareService,
+    private hardwareService: HardwareFirebaseService,
     private formBuilder: FormBuilder,
   private alertController : AlertController) { }
   
@@ -47,6 +47,7 @@ export class CadastrarPage implements OnInit {
   }
 
   ngOnInit() {
+    this.data = new Date().toISOString();
     this.formCadastrar = this.formBuilder.group({
       tipo : ["", [Validators.required]],
       marca:["", [Validators.required]],
@@ -55,23 +56,13 @@ export class CadastrarPage implements OnInit {
       desconto:["0", [Validators.required]],
       quantidade:[1, [Validators.required, Validators.pattern('^[0-9]*')]],
       dataLancamento : ["", [Validators.required]],
+      image : ["", [Validators.required]]
     });
     this.handleValorTotal()
   }
 
   private cadastrar(){
-    this.formCadastrar.value.preco=this.formCadastrar.value.preco.replace(',','.')
-    this.hardwareService.inserir(new Hardware(
-      this.formCadastrar.value.tipo,
-      this.formCadastrar.value.marca,
-      this.formCadastrar.value.modelo,
-      this.formCadastrar.value.preco,
-      this.formCadastrar.value.desconto,
-      this.formCadastrar.value.quantidade,
-      this.formCadastrar.value.dataLancamento));
-      this.router.navigateByUrl('/',{
-        replaceUrl : true
-       })
+    this.showLoading("Aguarde", 10000)
   }
 
   async presentAlert(header:string, subHeader:string,massage:string) {
@@ -83,5 +74,14 @@ export class CadastrarPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async showLoading(mensagem : string, duracao : number){
+    const loading = await this.loadingCtrl.create({
+      message: mensagem,
+      duration: duracao,
+    });
+
+    loading.present();
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Hardware } from 'src/app/models/hardware';
-import { HardwareService } from 'src/app/service/hardware.service';
+import { HardwareFirebaseService } from 'src/app/service/hardware-firebase.service';
 
 @Component({
   selector: 'app-home',
@@ -9,23 +9,31 @@ import { HardwareService } from 'src/app/service/hardware.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  folder: string;
-  harware : string[];
   hardwares : Hardware[];
 
   constructor(private activatedRoute: ActivatedRoute, private router : Router, 
-    private hardwareService:HardwareService) { }
+    private hardwareService:HardwareFirebaseService) { }
+    
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
-  ngOnInit() {
-    this.folder = this.activatedRoute.snapshot.paramMap.get('id');
-    this.hardwares=this.hardwareService.hardwares
+  carregarContatos(){
+    this.hardwareService.getHardwares()
+    .subscribe(res => {
+      this.hardwares = res.map(c =>{
+       return{
+        id: c.payload.doc.id,
+        ...c.payload.doc.data() as Hardware
+       }as Hardware;
+      })
+    });
   }
 
   irParaCadastrar(){
     this.router.navigate(["/cadastrar"]);
   }
   irParaDetalhar(value : Hardware){
-    console.log(value)
     this.router.navigateByUrl("/detalhar", {state:{Objeto : value}});
   }
 
