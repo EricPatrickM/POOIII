@@ -1,7 +1,12 @@
-#item{
+ion-content{
+    --ion-background-color:#333333;
+}
+
+.item{
     --background:rgb(206, 187, 187);
     border-radius: 45px;
     border: solid 2px rgb(19, 18, 18);
     margin: 3%;
     font-size: 28px;
+    --ion-text-color:#ffffff;
 }

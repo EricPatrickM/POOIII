@@ -41,7 +41,7 @@ export class HardwareFirebaseService {
       });
   }
 
-  editarHardware(hardware: Hardware, id: string) {
+  editarHardware(hardware: Hardware, downloadURL:any, id: string) {
     return this.angularFirestore
       .collection(this.PATH)
       .doc(id)
@@ -53,17 +53,41 @@ export class HardwareFirebaseService {
         quantidade: hardware.quantidade,
         desconto: hardware.desconto,
         dataLancamento: hardware.dataLancamento,
-        downloadURL: hardware.downloadURL
+        downloadURL : downloadURL,
       });
-
   }
 
   excluirHardware(hardware: Hardware) {
+    let name = hardware.downloadURL.substring(hardware.downloadURL.indexOf('%2F')+3, hardware.downloadURL.indexOf('?'))
+    this.angularFireStorage.ref('images')
+    .child(name).delete()
+
     return this.angularFirestore
       .collection(this.PATH)
       .doc(hardware.id)
       .delete();
   }
+
+    alterarImagem(hardware: Hardware, imagem:any, id: string) {
+      const file = imagem.item(0);
+      if (file.type.split('/')[0] !== 'image') {
+        console.error('Tipo Não Suportado');
+      return;
+      }
+      const path = `images/${new Date().getTime()}_${file.name}`;
+      const fileRef = this.angularFireStorage.ref(path);
+      let task = this.angularFireStorage.upload(path, file);
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          let uploadedFileURL = fileRef.getDownloadURL();
+          uploadedFileURL.subscribe((resp) => {
+            hardware.downloadURL = resp;
+            this.editarHardware(hardware, hardware.downloadURL, id);
+          })
+        })
+        ).subscribe();
+        return task;
+    }
 
   enviarImagem(imagem: any, hardware: Hardware) {
     const file = imagem.item(0);
@@ -73,31 +97,17 @@ export class HardwareFirebaseService {
     }
     const path = `images/${new Date().getTime()}_${file.name}`;
     const fileRef = this.angularFireStorage.ref(path);
-    if (hardware.downloadURL) {
-      fileRef.child(hardware.downloadURL).delete();
-      let task = this.angularFireStorage.upload(path, file);
-      task.snapshotChanges().pipe(
-        finalize(() => {
-          let uploadedFileURL = fileRef.getDownloadURL();
-          uploadedFileURL.subscribe((resp) => {
-            hardware.downloadURL = resp;
-            this.editarHardware(hardware, hardware.id);
-          })
+    let task = this.angularFireStorage.upload(path, file);
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        let uploadedFileURL = fileRef.getDownloadURL();
+        uploadedFileURL.subscribe((resp) => {
+          hardware.downloadURL = resp;
+          this.inserirHardware(hardware);
         })
-      ).subscribe();
-      return task;
-    } else {
-      let task = this.angularFireStorage.upload(path, file);
-      task.snapshotChanges().pipe(
-        finalize(() => {
-          let uploadedFileURL = fileRef.getDownloadURL();
-          uploadedFileURL.subscribe((resp) => {
-            hardware.downloadURL = resp;
-            this.inserirHardware(hardware);
-          })
-        })
-      ).subscribe();
-      return task;
+      })
+    ).subscribe();
+    return task;
     }
   }
-}
+

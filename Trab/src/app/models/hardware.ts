@@ -22,7 +22,7 @@ export class Hardware{
     }
      public get id() : string{
         return this._id;
-     }
+    }
     public get tipo() : string{
         return this._tipo;
     }

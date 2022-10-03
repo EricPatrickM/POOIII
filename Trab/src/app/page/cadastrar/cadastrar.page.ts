@@ -28,6 +28,7 @@ export class CadastrarPage implements OnInit {
       this.valorTotal = value
     }
   }
+
   constructor(private router: Router,
     private loadingCtrl : LoadingController,
     private hardwareService: HardwareFirebaseService,

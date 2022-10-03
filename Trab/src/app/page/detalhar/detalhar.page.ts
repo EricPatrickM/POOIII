@@ -17,9 +17,9 @@ export class DetalharPage implements OnInit {
   edicao: boolean = true;
   hardware : Hardware;
   data: string;
+  image : any;
 
   constructor(private router: Router,
-    private hardwareService: HardwareFirebaseService,
     private formBuilder: FormBuilder,
     private hardwareFS : HardwareFirebaseService,
   private alertController : AlertController) { }
@@ -35,7 +35,8 @@ export class DetalharPage implements OnInit {
       preco:[this.hardware.preco, [Validators.required, Validators.pattern('^[0-9]*.[0-9]*')]],
       desconto:[this.hardware.desconto.toString(), [Validators.required]],
       quantidade:[this.hardware.quantidade, [Validators.required, Validators.pattern('^[0-9]*')]],
-      dataLancamento : ["", [Validators.required]],
+      dataLancamento : [this.hardware.dataLancamento, [Validators.required]],
+      image : ['', [Validators.required]]
     });
     this.handleValorTotal();
   }
@@ -44,8 +45,10 @@ export class DetalharPage implements OnInit {
     return this.formCadastrar.controls
   }
 
+  uploadFile(image : any){
+    this.image = image.files;
+  }
   async handleValorTotal(){
-    console.log("PRECO" + this.formCadastrar.value.preco)
     const preco = parseFloat(this.formCadastrar.value.preco.replace(',','.'))
     const value = Math.round((this.formCadastrar.value.quantidade*preco*(1-this.formCadastrar.value.desconto/100)) * 100) / 100;
     if(isNaN(value)){
@@ -64,19 +67,29 @@ export class DetalharPage implements OnInit {
   }
 
   editar(){
-      this.hardwareFS.editarHardware(this.formCadastrar.value, this.hardware.id).then
-      (()=>{
-        this.presentAlert('Hardware', 'Sucesso', 'Contato Alterado!')
+      if(this.formCadastrar.value.image != ''){
+        this.hardwareFS.alterarImagem(this.formCadastrar.value, this.image, this.hardware.id).then
+        (()=>{
+          this.presentAlert('Hardware', 'Sucesso', 'Contato Alterado!')
         this.router.navigate(['/home'])
-      })
-      this.router.navigateByUrl('/',{
-        replaceUrl : true
       })
       .catch((error) => {
         this.presentAlert('Hardware', 'Falha', 'Erro no banco')
         console.log(error)
       })
+      } else {
+        this.hardwareFS.editarHardware(this.formCadastrar.value, this.hardware.downloadURL, this.hardware.id).then
+        (()=>{
+          this.presentAlert('Hardware', 'Sucesso', 'Contato Alterado!')
+        this.router.navigate(['/home'])
+        })
+        .catch((error) => {
+        this.presentAlert('Hardware', 'Falha', 'Erro no banco')
+        console.log(error)
+        })
+    }
   }
+  
   async presentAlert(header:string, subHeader:string,massage:string) {
     const alert = await this.alertController.create({
       header: header,
@@ -86,6 +99,7 @@ export class DetalharPage implements OnInit {
     });
     await alert.present();
   }
+  
   excluir(){
     this.presentAlertConfirm('Alerta', 'Excluir', 'Você realmente deseja excluir?')
   }
